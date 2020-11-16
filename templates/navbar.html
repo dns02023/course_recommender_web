@@ -1,0 +1,31 @@
+<!--navigation bar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <a class="navbar-brand" href="{% url 'lecture_app:index' %}">고려대학교 교양 강의 추천</a>
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item ">
+
+                {% if user.is_authenticated %}
+                    <!--로그인 여부에 따라 로그인/아웃 활성화 구분-->
+                <a class="nav-link" href="{% url 'member_app:signout' %}">{{ user.profile.klue_name }} (로그아웃)</a>
+                    <!-- 프로필 페이지 링크 연결 -->
+                    <a class="nav-link" href="{% url 'member_app:mypage' %}">마이 페이지</a>
+
+                {% else %}
+                <a class="nav-link" href="{% url 'member_app:signin' %}">로그인</a>
+                {% endif %}
+
+
+
+
+
+
+
+            </li>
+        </ul>
+    </div>
+</nav>

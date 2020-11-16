@@ -1,0 +1,92 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-3">
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-dark">
+            <th>학수번호</th>
+            <th>강의명</th>
+            <th>담당교수</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% if lecture_list %}
+        {% for lecture in lecture_list %}
+        <tr>
+            <td>
+               <a href="{% url 'lecture_app:detail' lecture.id %}">{{ lecture.lectid }}</a>
+                <!-- place 상세 정보 조회를 위해 링크를 걸어 둠, url(view) 매개변수 lecture의 id값 -->
+            </td>
+            <td>{{ lecture.lectname }}</td>
+            <td>{{ lecture.professor }}</td>
+        <td>
+            <a href="{% url 'member_app:wish' lecture.id %}">담아두기</a>
+        </td>
+
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">등록된 강의가 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+<!-- 페이징처리 시작 -->
+<!-- 'lecture_list' 는 page_obj 컨텍스트 임 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if lecture_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ lecture_list.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in lecture_list.paginator.page_range %}
+
+            {% if page_number >= lecture_list.number|add:-5 and page_number <= lecture_list.number|add:5 %}
+
+                {% if page_number == lecture_list.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if lecture_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ lecture_list.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+

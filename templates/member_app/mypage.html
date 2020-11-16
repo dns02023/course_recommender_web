@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h5 class="border-bottom my-3 py-2">{{user.profile.wish_lectures.count}}개의 강의를 담았습니다.</h5>
+
+    <div class="container my-3">
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-dark">
+            <th>학수번호</th>
+            <th>강의명</th>
+            <th>담당교수</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if user.profile.wish_lectures.all %}
+        {% for lecture in user.profile.wish_lectures.all %}
+        <tr>
+            <td>
+                <a href="{% url 'lecture_app:detail' lecture.id %}">{{ lecture.lectid }}</a>
+            </td>
+            <td>{{ lecture.lectname }}</td>
+            <td>{{ lecture.professor }}</td>
+        <td>
+
+            <a href="{% url 'member_app:wish_cancel' lecture.id %}">삭제</a>
+        </td>
+
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">아직 담은 강의가 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+
+
+
+    </table>
+    </div>
+
+
+
+
+
+
+
+
+
+{% endblock %}

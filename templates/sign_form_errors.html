@@ -1,0 +1,36 @@
+{% if user_form.errors %}
+    <!-- 로그인 실패 시, 이유를 명시해주기 위해 사용-->
+    {% for field in user_form %}
+        {% for error in field.errors %}  <!-- 필드 오류를 출력한다. -->
+            <div class="alert alert-danger">
+                <strong>{{ field.label }}</strong>
+                {{ error }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in user_form.non_field_errors %}   <!-- 넌필드 오류를 출력한다. -->
+        <div class="alert alert-danger">
+            <strong>{{ error }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if profile_form.errors %}
+    <!-- 로그인 실패 시, 이유를 명시해주기 위해 사용-->
+    {% for field in profile_form %}
+        {% for error in field.errors %}  <!-- 필드 오류를 출력한다. -->
+            <div class="alert alert-danger">
+                <strong>{{ field.label }}</strong>
+                {{ error }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in profile_form.non_field_errors %}   <!-- 넌필드 오류를 출력한다. -->
+        <div class="alert alert-danger">
+            <strong>{{ error }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+
