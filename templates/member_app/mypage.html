@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if recommends %}
+        <div>{{ request.user.profile.klue_name }}님이 좋아할 수도 있는 강의들</div>
+        <div>
+        {% for recommend in recommends %}
+            <tr>
+            <a href="{% url 'lecture_app:detail' recommend.id %}">{{ recommend.lectname }}</a>
+            </tr>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+
     <h5 class="border-bottom my-3 py-2">{{user.profile.wish_lectures.count}}개의 강의를 담았습니다.</h5>
 
     <div class="container my-3">

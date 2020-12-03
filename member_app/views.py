@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from lecture_app.models import Lecture
 from django.contrib import messages
 import logging
+import elasticsearch
+
+es = elasticsearch.Elasticsearch("localhost:9200")
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +45,36 @@ def signup(request):
 @login_required(login_url='member_app:signin')
 def mypage(request):
     user = request.user
-    context = {'user': user}
+    body1 = {
+        "query": {
+        "query_string": {
+        "default_field": "user_id",
+        "query": user.id
+            }
+          }
+        }
+    res1 = es.search(index='recommenders_db', body=body1)
+    count = res1['hits']['total']['value']
+
+    body2 = {
+        "from": count - 1,
+        "size": 1,
+
+        "query": {
+            "query_string": {
+                "default_field": "user_id",
+                "query": 1
+            }
+        }
+    }
+    res2 = es.search(index='recommenders_db', body=body2)
+    rec_ids = res2['hits']['hits'][-1]['_source']['best']
+    recommends = list()
+    for rec_id in rec_ids:
+        rec = get_object_or_404(Lecture, pk=rec_id)
+        recommends.append(rec)
+
+    context = {'user': user, 'recommends': recommends}
     return render(request, 'member_app/mypage.html', context)
 
 @login_required(login_url='member_app:signin')
