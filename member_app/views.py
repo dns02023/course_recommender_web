@@ -45,27 +45,16 @@ def signup(request):
 @login_required(login_url='member_app:signin')
 def mypage(request):
     user = request.user
-    body1 = {
-        "query": {
-        "query_string": {
-        "default_field": "user_id",
-        "query": user.id
-            }
-          }
-        }
-    res1 = es.search(index='recommenders_db', body=body1)
-    count = res1['hits']['total']['value']
 
     body2 = {
-        "from": count - 1,
-        "size": 1,
-
         "query": {
             "query_string": {
                 "default_field": "user_id",
-                "query": 1
+                "query": user.id
             }
-        }
+        },
+        "sort": {"@timestamp": "desc"},
+        "size": 1
     }
     res2 = es.search(index='recommenders_db', body=body2)
     rec_ids = res2['hits']['hits'][-1]['_source']['best']
